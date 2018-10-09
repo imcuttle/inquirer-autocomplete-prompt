@@ -44,6 +44,7 @@
     "inquirer": "^5.0.0 || ^6.0.0"
   },
   "scripts": {
+    "prepublish": "npm test",
     "lint": "eslint .",
     "pretest": "npm run-script lint && flow",
     "test": "istanbul cover ./node_modules/.bin/_mocha test/spec",
