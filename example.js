@@ -6,6 +6,7 @@
 var inquirer = require('inquirer');
 var _ = require('lodash');
 var fuzzy = require('fuzzy');
+var sliceInput = require('./index').sliceInput;
 
 inquirer.registerPrompt('autocomplete', require('./index'));
 
@@ -99,25 +100,6 @@ function searchFood(answers, input) {
       );
     }, _.random(30, 500));
   });
-}
-
-function sliceInput(input, { cursor } = {}) {
-  var string = '';
-  var leftIndex = input.length - 1;
-  var rightIndex = input.length - 1;
-  if (/([^\s,]*)$/.test(input.slice(0, cursor))) {
-    string += RegExp.$1;
-    leftIndex = cursor - RegExp.$1.length;
-  }
-  if (/^([^\s,]*)/.test(input.slice(cursor))) {
-    string += RegExp.$1;
-    rightIndex = cursor + RegExp.$1.length;
-  }
-  return {
-    matching: string,
-    leftIndex,
-    rightIndex
-  };
 }
 
 inquirer

@@ -1,5 +1,8 @@
 {
-  "name": "inquirer-autocomplete-prompt",
+  "name": "@moyuyc/inquirer-autocomplete-prompt",
+  "publicConfig": {
+    "access": "public"
+  },
   "description": "Autocomplete prompt for inquirer",
   "version": "1.0.1",
   "files": [
@@ -46,6 +49,6 @@
     "lint": "eslint .",
     "pretest": "npm run-script lint && flow",
     "test": "istanbul cover ./node_modules/.bin/_mocha test/spec",
-    "posttest": "istanbul check-coverage --statements 85 --branches 85 --functions 85 --lines 85 && rm -rf coverage"
+    "posttest": "istanbul check-coverage --statements 85 --branches 80 --functions 85 --lines 85 && rm -rf coverage"
   }
 }

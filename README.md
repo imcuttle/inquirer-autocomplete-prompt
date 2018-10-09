@@ -1,5 +1,6 @@
-# inquirer-autocomplete-prompt
+# @moyuyc/inquirer-autocomplete-prompt
 
+**Forked from [inquirer-autocomplete-prompt](https://github.com/mokkabonna/inquirer-autocomplete-prompt), but [exported readline as third argument in `source` for suggesting matched text](https://github.com/mokkabonna/inquirer-autocomplete-prompt/pull/73)**
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/mokkabonna/inquirer-autocomplete-prompt.svg)](https://greenkeeper.io/)
 
@@ -11,16 +12,15 @@ Autocomplete prompt for [inquirer](https://github.com/SBoudrias/Inquirer.js)
 ## Installation
 
 ```
-npm install --save inquirer-autocomplete-prompt
+npm install --save @moyuyc/inquirer-autocomplete-prompt
 ```
 
 ## Usage
 
-
 This prompt is anonymous, meaning you can register this prompt with the type name you please:
 
 ```javascript
-inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
+inquirer.registerPrompt('autocomplete', require('@moyuyc/inquirer-autocomplete-prompt'));
 inquirer.prompt({
   type: 'autocomplete',
   ...
@@ -45,32 +45,47 @@ See [inquirer](https://github.com/SBoudrias/Inquirer.js) readme for meaning of a
 
 **validate** is only active when **suggestOnly** is set to **true**. It behaves like validate for the input prompt.
 
-
 #### Example
 
 ```javascript
-inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
-inquirer.prompt([{
-  type: 'autocomplete',
-  name: 'from',
-  message: 'Select a state to travel from',
-  source: function(answersSoFar, input) {
-    return myApi.searchStates(input);
-  }
-}]).then(function(answers) {
-  //etc
-});
+const autoComplete = require('@moyuyc/inquirer-autocomplete-prompt');
+inquirer.registerPrompt('autocomplete', autoComplete);
+inquirer
+  .prompt([
+    {
+      type: 'autocomplete',
+      name: 'from',
+      message: 'Select a state to travel from',
+      source: function(answersSoFar, input, rl) {
+        // e.g. sliceInput('closed #123,#222', { delimiter: '\\s,', cursor: 7 })
+        // output: { leftIndex: 7, matching: '#123', rightIndex: 11 }
+        //  input.slice(0, leftIndex) + matching + input.slice(rightIndex) === input
+        const { matching, leftIndex, rightIndex } = autoComplete.sliceInput(
+          input,
+          // delimiter:
+          //    sliceInput
+          //    type: string
+          //    default: `'\\s'`
+          { ...rl, delimiter: ',\\s' }
+        );
+        // rl.cursor
+        return myApi.searchStates(input);
+      },
+    },
+  ])
+  .then(function(answers) {
+    //etc
+  });
 ```
 
-See also [example.js](https://github.com/mokkabonna/inquirer-autocomplete-prompt/blob/master/example.js) for a working example.
+See also [example.js](./example.js) for a working example.
 
 I recommend using this package with [fuzzy](https://www.npmjs.com/package/fuzzy) if you want fuzzy search. Again, see the example for a demonstration of this.
-
-![Autocomplete prompt](./inquirer.gif)
 
 ![Autocomplete prompt](./snapshot.svg)
 
 ## Credits
+
 [Martin Hansen](https://github.com/mokkabonna/)
 
 ## License

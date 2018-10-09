@@ -273,4 +273,6 @@ function listRender(choices, pointer /*: string */) /*: string */ {
   return output.replace(/\n$/, '');
 }
 
+AutocompletePrompt.sliceInput = require('./slice-input');
+
 module.exports = AutocompletePrompt;
