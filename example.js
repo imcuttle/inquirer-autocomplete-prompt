@@ -110,7 +110,7 @@ inquirer
       suggestOnly: true,
       message: 'What issues you want to close (e.g. close #123,#234)?',
       source: (answer, input = '', { cursor }) => {
-        var { matching, leftIndex, rightIndex } = sliceInput(input, { cursor });
+        var { matching, leftIndex, rightIndex } = sliceInput(input, { cursor, delimiter: '\\s,' });
         var makeChoice = name => {
           var name = name + matching.slice(1);
           return {
