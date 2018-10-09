@@ -1,8 +1,5 @@
 {
   "name": "@moyuyc/inquirer-autocomplete-prompt",
-  "publicConfig": {
-    "access": "public"
-  },
   "description": "Autocomplete prompt for inquirer",
   "version": "1.0.1",
   "files": [
@@ -13,6 +10,7 @@
     "url": "git@github.com:mokkabonna/inquirer-autocomplete-prompt.git"
   },
   "publishConfig": {
+    "access": "public",
     "registry": "http://registry.npmjs.org"
   },
   "author": "Martin Hansen <martin@martinhansen.no>",
