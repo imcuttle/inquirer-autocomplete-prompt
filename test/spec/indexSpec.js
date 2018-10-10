@@ -29,10 +29,59 @@ describe('inquirer-autocomplete-prompt', function() {
           message: 'test',
           name: 'name',
           suggestOnly: true,
-          source: source
+          source: source,
         },
         rl
       );
+    });
+
+    it('default value with suggestOnly = true', function() {
+      prompt = new Prompt(
+        {
+          message: 'test',
+          name: 'name',
+          default: '123',
+          suggestOnly: true,
+          source: source,
+        },
+        rl
+      );
+
+      promiseForAnswer = getPromiseForAnswer();
+      expect(prompt.rl.line).to.equal('');
+      expect(prompt.rl.cursor).to.equal(undefined);
+      enter();
+
+      return promiseForAnswer.then(function(answer) {
+        expect(answer).to.equal('123');
+      });
+    });
+
+    it('default value with suggestOnly = false', function() {
+      prompt = new Prompt(
+        {
+          message: 'test',
+          name: 'name',
+          default: 'foo',
+          suggestOnly: false,
+          source: source,
+        },
+        rl
+      );
+
+      promiseForAnswer = getPromiseForAnswer();
+
+      expect(prompt.rl.line).to.equal('foo');
+      expect(prompt.rl.cursor).to.equal('foo'.length);
+
+      resolve(defaultChoices);
+      return promise.then(() => {
+        enter();
+
+        return promiseForAnswer.then(function(answer) {
+          expect(answer).to.equal('foo');
+        });
+      });
     });
 
     it('applies filter', function() {
@@ -50,7 +99,6 @@ describe('inquirer-autocomplete-prompt', function() {
       );
 
       promiseForAnswer = getPromiseForAnswer();
-
       type('banana');
       enter();
 
@@ -263,7 +311,7 @@ describe('inquirer-autocomplete-prompt', function() {
     it('immediately calls source with undefined', function() {
       prompt.run();
       sinon.assert.calledOnce(source);
-      sinon.assert.calledWithExactly(source, undefined, undefined, prompt.rl);
+      sinon.assert.calledWithExactly(source, undefined, '', prompt.rl);
     });
 
     describe('when it has some results', function() {

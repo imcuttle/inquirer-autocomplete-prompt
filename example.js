@@ -108,14 +108,18 @@ inquirer
       type: 'autocomplete',
       name: 'issues',
       suggestOnly: true,
+      default: 'closed #123',
       message: 'What issues you want to close (e.g. close #123,#234)?',
       source: (answer, input = '', { cursor }) => {
-        var { matching, leftIndex, rightIndex } = sliceInput(input, { cursor, delimiter: '\\s,' });
+        var { matching, leftIndex, rightIndex } = sliceInput(input, {
+          cursor,
+          delimiter: '\\s,',
+        });
         var makeChoice = name => {
           var name = name + matching.slice(1);
           return {
             name,
-            value: input.slice(0, leftIndex) + name + input.slice(rightIndex)
+            value: input.slice(0, leftIndex) + name + input.slice(rightIndex),
           };
         };
 
@@ -123,7 +127,7 @@ inquirer
           return [
             makeChoice('issue-'),
             makeChoice('issue-a-'),
-            makeChoice('issue-ab-')
+            makeChoice('issue-ab-'),
           ];
         }
 
@@ -138,6 +142,7 @@ inquirer
       type: 'autocomplete',
       name: 'fruit',
       suggestOnly: true,
+      default: 'Orange',
       message: 'What is your favorite fruit?',
       source: searchFood,
       pageSize: 4,
@@ -148,8 +153,59 @@ inquirer
     {
       type: 'autocomplete',
       name: 'state',
+      default: 'Utah',
       message: 'Select a state to travel from',
       source: searchStates,
+    },
+    {
+      type: 'autocomplete',
+      name: 'state',
+      message: 'Select a state to travel from (without default)',
+      source: searchStates,
+    },
+    {
+      type: 'autocomplete',
+      name: 'fruit',
+      suggestOnly: true,
+      message: 'What is your favorite fruit(without default)?',
+      source: searchFood,
+      pageSize: 4,
+      validate: function(val) {
+        return val ? true : 'Type something!';
+      },
+    },
+    {
+      type: 'autocomplete',
+      name: 'issues',
+      suggestOnly: true,
+      message: 'What issues you want to close (e.g. close #123,#234)?',
+      source: (answer, input = '', { cursor }) => {
+        var { matching, leftIndex, rightIndex } = sliceInput(input, {
+          cursor,
+          delimiter: '\\s,',
+        });
+        var makeChoice = name => {
+          var name = name + matching.slice(1);
+          return {
+            name,
+            value: input.slice(0, leftIndex) + name + input.slice(rightIndex),
+          };
+        };
+
+        if (matching.startsWith('#') && matching.length > 1) {
+          return [
+            makeChoice('issue-'),
+            makeChoice('issue-a-'),
+            makeChoice('issue-ab-'),
+          ];
+        }
+
+        return [];
+      },
+      pageSize: 4,
+      validate: function(val) {
+        return val ? true : 'Type something!';
+      },
     },
   ])
   .then(function(answers) {

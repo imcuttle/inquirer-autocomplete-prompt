@@ -13,7 +13,7 @@ var observe = require('inquirer/lib/utils/events');
 var utils = require('inquirer/lib/utils/readline');
 var Paginator = require('inquirer/lib/utils/paginator');
 var runAsync = require('run-async');
-var { takeWhile } = require('rxjs/operators');
+var { takeWhile, map } = require('rxjs/operators');
 var debounce = require('lodash.debounce');
 
 class AutocompletePrompt extends Base {
@@ -34,11 +34,23 @@ class AutocompletePrompt extends Base {
     this.selected = 0;
 
     // Make sure no default is set (so it won't be printed)
-    this.opt.default = null;
+    if (!this.opt.suggestOnly && typeof this.opt.default === 'string') {
+      this.rl.line = this.opt.default;
+      this.rl.cursor = this.opt.default.length;
+      this.opt.default = null;
+    }
 
     this.paginator = new Paginator();
 
     this.search = debounce(this.undebouncedSearch);
+  }
+
+  filterInput(input /*: string */) {
+    if (!input) {
+      // eslint-disable-next-line no-eq-null, eqeqeq
+      return this.opt.default == null ? '' : this.opt.default;
+    }
+    return input;
   }
 
   /**
@@ -54,18 +66,20 @@ class AutocompletePrompt extends Base {
     }
 
     var events = observe(this.rl);
+    var submit = events.line.pipe(map(this.filterInput.bind(this)));
 
-    const dontHaveAnswer = () => !this.answer;
+    const dontHaveAnswer = () => {
+      return !this.answer;
+    };
 
-    events.line
-      .pipe(takeWhile(dontHaveAnswer))
-      .forEach(this.onSubmit.bind(this));
+    submit.pipe(takeWhile(dontHaveAnswer)).forEach(this.onSubmit.bind(this));
+
     events.keypress
       .pipe(takeWhile(dontHaveAnswer))
       .forEach(this.onKeypress.bind(this));
 
     // Call once at init
-    this.undebouncedSearch(undefined);
+    this.undebouncedSearch(this.rl.line);
 
     return this;
   }
@@ -79,7 +93,7 @@ class AutocompletePrompt extends Base {
     var content = this.getQuestion();
     var bottomContent = '';
 
-    if (this.firstRender) {
+    if (this.firstRender && !this.rl.line) {
       var suggestText = this.opt.suggestOnly ? ', tab to autocomplete' : '';
       content += chalk.dim(
         '(Use arrow keys or type to search' + suggestText + ')'
