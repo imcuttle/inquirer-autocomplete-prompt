@@ -3,7 +3,8 @@
   "description": "Autocomplete prompt for inquirer",
   "version": "1.0.3",
   "files": [
-    "index.js"
+    "index.js",
+    "slice-input.js"
   ],
   "publishConfig": {
     "access": "public",
