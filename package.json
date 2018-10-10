@@ -5,10 +5,6 @@
   "files": [
     "index.js"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:mokkabonna/inquirer-autocomplete-prompt.git"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "http://registry.npmjs.org"
@@ -49,5 +45,18 @@
     "pretest": "npm run-script lint && flow",
     "test": "istanbul cover ./node_modules/.bin/_mocha test/spec",
     "posttest": "istanbul check-coverage --statements 85 --branches 80 --functions 85 --lines 85 && rm -rf coverage"
-  }
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imcuttle/inquirer-autocomplete-prompt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/imcuttle/inquirer-autocomplete-prompt/issues"
+  },
+  "homepage": "https://github.com/imcuttle/inquirer-autocomplete-prompt#readme"
 }
