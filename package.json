@@ -1,7 +1,7 @@
 {
   "name": "@moyuyc/inquirer-autocomplete-prompt",
   "description": "Autocomplete prompt for inquirer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "files": [
     "index.js",
     "slice-input.js"
