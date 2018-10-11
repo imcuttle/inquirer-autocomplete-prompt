@@ -23,7 +23,13 @@ class AutocompletePrompt extends Base {
     answers /*: Array<any> */
   ) {
     super(questions, rl, answers);
-
+    this.opt = Object.assign(
+      {
+        searchText: 'Searching...',
+        noResultText: 'No results...',
+      },
+      this.opt
+    );
     if (!this.opt.source) {
       this.throwParamError('source');
     }
@@ -32,7 +38,6 @@ class AutocompletePrompt extends Base {
 
     this.firstRender = true;
     this.selected = 0;
-
     // Make sure no default is set (so it won't be printed)
     if (!this.opt.suggestOnly && typeof this.opt.default === 'string') {
       this.rl.line = this.opt.default;
@@ -104,7 +109,8 @@ class AutocompletePrompt extends Base {
       content += chalk.cyan(this.shortAnswer || this.answerName || this.answer);
     } else if (this.searching) {
       content += this.rl.line;
-      bottomContent += '  ' + chalk.dim('Searching...');
+      if (this.opt.searchText)
+        bottomContent += '  ' + chalk.dim(this.opt.searchText);
     } else if (this.currentChoices.length) {
       var choicesStr = listRender(this.currentChoices, this.selected);
       content += this.rl.line;
@@ -115,13 +121,13 @@ class AutocompletePrompt extends Base {
       );
     } else {
       content += this.rl.line;
-      bottomContent += '  ' + chalk.yellow('No results...');
+      if (this.opt.noResultText)
+        bottomContent += '  ' + chalk.yellow(this.opt.noResultText);
     }
 
     if (error) {
       bottomContent += '\n' + chalk.red('>> ') + error;
     }
-
     this.firstRender = false;
 
     this.screen.render(content, bottomContent);

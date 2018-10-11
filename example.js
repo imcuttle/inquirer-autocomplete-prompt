@@ -106,6 +106,8 @@ inquirer
   .prompt([
     {
       type: 'autocomplete',
+      noResultText: null,
+      searchText: null,
       name: 'issues',
       suggestOnly: true,
       default: 'closed #123',

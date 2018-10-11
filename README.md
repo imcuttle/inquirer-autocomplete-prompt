@@ -33,7 +33,7 @@ Change `autocomplete` to whatever you might prefer.
 
 > **Note:** _allowed options written inside square brackets (`[]`) are optional. Others are required._
 
-`type`, `name`, `message`, `source`[, `pageSize`, `filter`, `when`, `suggestOnly`, `validate`, `default`]
+`type`, `name`, `message`, `source`[, `pageSize`, `filter`, `when`, `suggestOnly`, `validate`, `default`, `noResultText`, `searchText`]
 
 See [inquirer](https://github.com/SBoudrias/Inquirer.js) readme for meaning of all except **source** and **suggestOnly**.
 
@@ -46,6 +46,10 @@ See [inquirer](https://github.com/SBoudrias/Inquirer.js) readme for meaning of a
 **validate** is only active when **suggestOnly** is set to **true**. It behaves like validate for the input prompt.
 
 **default** is type of **string**. Setting it as default value.
+
+**noResultText** is type of **string | null**. Setting it as text to view (hide it when `null`) when no results. (`'No results...'` by default)
+
+**searchText** is type of **string | null**. Setting it as text to view (hide it when `null`) when is searching. (`'Searching...'` by default)
 
 
 #### Example
