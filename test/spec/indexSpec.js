@@ -6,6 +6,8 @@ var inquirer = require('inquirer');
 var ReadlineStub = require('../helpers/readline');
 var Prompt = require('../../index');
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 describe('inquirer-autocomplete-prompt', function() {
   var source;
   var prompt;
@@ -80,6 +82,35 @@ describe('inquirer-autocomplete-prompt', function() {
 
         return promiseForAnswer.then(function(answer) {
           expect(answer).to.equal('foo');
+        });
+      });
+    });
+
+    it('render error when `source` thrown error', function() {
+      prompt = new Prompt(
+        {
+          message: 'test',
+          name: 'name',
+          // default: 'foo',
+          suggestOnly: false,
+          source: (anw, ipt) => {
+            if ('error' === ipt) throw new Error('sourceError');
+            return [ipt];
+          },
+        },
+        rl
+      );
+
+      promiseForAnswer = getPromiseForAnswer();
+
+      resolve(defaultChoices);
+      return promise.then(() => {
+        type('2222');
+        enter(prompt.rl.line);
+        return delay(100).then(() => {
+          promiseForAnswer.then(function(answer) {
+            expect(answer).to.equal('foo');
+          });
         });
       });
     });
@@ -512,8 +543,8 @@ describe('inquirer-autocomplete-prompt', function() {
     });
   }
 
-  function enter() {
-    rl.emit('line');
+  function enter(line) {
+    rl.emit('line', line);
   }
 
   function tab() {

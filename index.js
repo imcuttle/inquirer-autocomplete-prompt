@@ -196,26 +196,32 @@ class AutocompletePrompt extends Base {
       self.searchedOnce = true;
     }
     self.lastSearchTerm = searchTerm;
-    var thisPromise = self.opt.source(self.answers, searchTerm, this.rl);
+    var source = () => self.opt.source(self.answers, searchTerm, this.rl);
 
     // Store this promise for check in the callback
-    self.lastPromise = thisPromise;
+    self.lastSource = source;
 
-    return Promise.resolve(thisPromise).then(function inner(choices) {
-      choices = choices || [];
-      // If another search is triggered before the current search finishes, don't set results
-      if (thisPromise !== self.lastPromise) return;
+    return Promise.resolve()
+      .then(() => source())
+      .then(function inner(choices) {
+        choices = choices || [];
+        // If another search is triggered before the current search finishes, don't set results
+        if (source !== self.lastSource) return;
 
-      choices = new Choices(
-        choices.filter(function(choice) {
-          return choice.type !== 'separator';
-        })
-      );
+        choices = new Choices(
+          choices.filter(function(choice) {
+            return choice.type !== 'separator';
+          })
+        );
 
-      self.currentChoices = choices;
-      self.searching = false;
-      self.render();
-    }).catch(console.error);
+        self.currentChoices = choices;
+        self.searching = false;
+        self.render();
+      })
+      .catch(function(error) {
+        self.searching = false;
+        self.render(String(error));
+      });
   }
 
   ensureSelectedInRange() {

@@ -144,6 +144,23 @@ inquirer
       type: 'autocomplete',
       name: 'fruit',
       suggestOnly: true,
+      default: 'error',
+      message: 'What is your favorite fruit(error)?',
+      source: (ans, ipt) => {
+        if (ipt === 'error') {
+          throw new Error('error!');
+        }
+        return [ipt];
+      },
+      pageSize: 4,
+      validate: function(val) {
+        return val ? true : 'Type something!';
+      },
+    },
+    {
+      type: 'autocomplete',
+      name: 'fruit',
+      suggestOnly: true,
       default: 'Orange',
       message: 'What is your favorite fruit?',
       source: searchFood,
