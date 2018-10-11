@@ -215,7 +215,7 @@ class AutocompletePrompt extends Base {
       self.currentChoices = choices;
       self.searching = false;
       self.render();
-    });
+    }).catch(console.error);
   }
 
   ensureSelectedInRange() {
