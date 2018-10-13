@@ -121,6 +121,7 @@ inquirer
           var name = name + matching.slice(1);
           return {
             name,
+            cursor: leftIndex + name.length,
             value: input.slice(0, leftIndex) + name + input.slice(rightIndex),
           };
         };

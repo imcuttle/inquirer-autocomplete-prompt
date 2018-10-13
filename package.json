@@ -31,7 +31,6 @@
     "sinon": "^4.1.2"
   },
   "dependencies": {
-    "ansi-escapes": "^3.0.0",
     "chalk": "^2.0.0",
     "figures": "^2.0.0",
     "lodash.debounce": "^4.0.8",

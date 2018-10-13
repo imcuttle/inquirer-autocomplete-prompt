@@ -4,7 +4,6 @@
  * `autocomplete` type prompt
  */
 
-var ansiEscapes = require('ansi-escapes');
 var chalk = require('chalk');
 var figures = require('figures');
 var Base = require('inquirer/lib/prompts/base');
@@ -249,9 +248,10 @@ class AutocompletePrompt extends Base {
 
     if (keyName === 'tab' && this.opt.suggestOnly) {
       if (this.currentChoices.getChoice(this.selected)) {
-        this.rl.write(ansiEscapes.cursorLeft);
-        var autoCompleted = this.currentChoices.getChoice(this.selected).value;
-        this.rl.write(ansiEscapes.cursorForward(autoCompleted.length));
+        var sel = this.currentChoices.getChoice(this.selected);
+        var autoCompleted = sel.value;
+        this.rl.cursor =
+          typeof sel.cursor === 'number' ? sel.cursor : autoCompleted.length;
         this.rl.line = autoCompleted;
         this.render();
       }
