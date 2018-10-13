@@ -111,7 +111,7 @@ inquirer
       name: 'issues',
       suggestOnly: true,
       default: 'closed #123',
-      message: 'What issues you want to close (e.g. close #123,#234)?',
+      message: 'What issues you want to close (e.g. close #123,#234)?\n',
       source: (answer, input = '', { cursor }) => {
         var { matching, leftIndex, rightIndex } = sliceInput(input, {
           cursor,
@@ -141,28 +141,42 @@ inquirer
       },
     },
     {
+      name: 'input',
+      type: 'input',
+      message: 'im input\n'
+    },
+    {
+      type: 'confirm',
+      name: 'confirm',
+      default: false,
+      message: 'Are you sure?'
+    },
+    {
       type: 'autocomplete',
       name: 'fruit',
       suggestOnly: true,
-      default: 'error',
-      message: 'What is your favorite fruit(error)?',
+      message: 'What is your favorite fruit(error)?\n',
       source: (ans, ipt) => {
         if (ipt === 'error') {
           throw new Error('error!');
         }
         return [ipt];
       },
-      pageSize: 4,
-      validate: function(val) {
-        return val ? true : 'Type something!';
-      },
+      pageSize: 4
+    },
+    {
+      type: 'confirm',
+      name: 'confirm',
+      default: false,
+      message: 'Are you sure?'
     },
     {
       type: 'autocomplete',
       name: 'fruit',
+      when: ans => ans.confirm,
       suggestOnly: true,
       default: 'Orange',
-      message: 'What is your favorite fruit?',
+      message: 'What is your favorite fruit?\n',
       source: searchFood,
       pageSize: 4,
       validate: function(val) {
@@ -170,23 +184,30 @@ inquirer
       },
     },
     {
+      type: 'confirm',
+      name: 'confirm2',
+      default: false,
+      message: 'Are you sure?'
+    },
+    {
+      when: ans => ans.confirm2,
       type: 'autocomplete',
       name: 'state',
       default: 'Utah',
-      message: 'Select a state to travel from',
+      message: 'Select a state to travel from\n',
       source: searchStates,
     },
     {
       type: 'autocomplete',
       name: 'state',
-      message: 'Select a state to travel from (without default)',
+      message: 'Select a state to travel from (without default)\n',
       source: searchStates,
     },
     {
       type: 'autocomplete',
       name: 'fruit',
       suggestOnly: true,
-      message: 'What is your favorite fruit(without default)?',
+      message: 'What is your favorite fruit(without default)?\n',
       source: searchFood,
       pageSize: 4,
       validate: function(val) {
