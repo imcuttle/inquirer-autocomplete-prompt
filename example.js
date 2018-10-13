@@ -84,7 +84,7 @@ function searchStates(answers, input) {
           return el.original;
         })
       );
-    }, _.random(30, 500));
+    }, _.random(400, 500));
   });
 }
 
@@ -98,7 +98,7 @@ function searchFood(answers, input) {
           return el.original;
         })
       );
-    }, _.random(30, 500));
+    }, _.random(500, 800));
   });
 }
 

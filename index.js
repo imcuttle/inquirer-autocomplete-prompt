@@ -186,12 +186,14 @@ class AutocompletePrompt extends Base {
   undebouncedSearch(searchTerm /* : ?string */) {
     var self = this;
     self.selected = 0;
-
+    var searchingTime;
     // Only render searching state after first time
     if (self.searchedOnce) {
-      self.searching = true;
-      self.currentChoices = new Choices([]);
-      self.render(); // Now render current searching state
+      searchingTime = setTimeout(function() {
+        self.searching = true;
+        self.currentChoices = new Choices([]);
+        self.render(); // Now render current searching state
+      }, 300);
     } else {
       self.searchedOnce = true;
     }
@@ -204,6 +206,8 @@ class AutocompletePrompt extends Base {
     return Promise.resolve()
       .then(() => source())
       .then(function inner(choices) {
+        clearTimeout(searchingTime);
+
         choices = choices || [];
         // If another search is triggered before the current search finishes, don't set results
         if (source !== self.lastSource) return;
@@ -219,6 +223,8 @@ class AutocompletePrompt extends Base {
         self.render();
       })
       .catch(function(error) {
+        clearTimeout(searchingTime);
+
         self.searching = false;
         self.render(String(error));
       });
@@ -261,8 +267,8 @@ class AutocompletePrompt extends Base {
       this.ensureSelectedInRange();
       this.render();
     } else {
-      this.render(); // Render input automatically
       // Only search if input have actually changed, not because of other keypresses
+      this.render(); // Render input automatically
 
       if (isCursorUpdated) {
         this.search(this.rl.line); // Trigger new search
