@@ -33,7 +33,7 @@ Change `autocomplete` to whatever you might prefer.
 
 > **Note:** _allowed options written inside square brackets (`[]`) are optional. Others are required._
 
-`type`, `name`, `message`, `source`[, `pageSize`, `filter`, `when`, `suggestOnly`, `validate`, `default`, `noResultText`, `searchText`]
+`type`, `name`, `message`, `source`[, `pageSize`, `filter`, `when`, `suggestOnly`, `validate`, `default`, `noResultText`, `searchText`, `throttleWaitMilliseconds`]
 
 See [inquirer](https://github.com/SBoudrias/Inquirer.js) readme for meaning of all except **source** and **suggestOnly**.
 
@@ -50,6 +50,8 @@ See [inquirer](https://github.com/SBoudrias/Inquirer.js) readme for meaning of a
 **noResultText** is type of **string | null**. Setting it as text to view (hide it when `null`) when no results. (`'No results...'` by default)
 
 **searchText** is type of **string | null**. Setting it as text to view (hide it when `null`) when is searching. (`'Searching...'` by default)
+
+**throttleWaitMilliseconds** is type of **number** for throttle search call times (400 by default)
 
 
 #### Example

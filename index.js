@@ -43,10 +43,8 @@ class AutocompletePrompt extends Base {
       this.rl.cursor = this.opt.default.length;
       this.opt.default = null;
     }
-
     this.paginator = new Paginator();
-
-    this.search = debounce(this.undebouncedSearch);
+    this.search = debounce(this.undebouncedSearch, this.opt.throttleWaitMilliseconds || 400);
   }
 
   filterInput(input /*: string */) {
